@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   DndContext,
   DragOverlay,
@@ -50,18 +50,30 @@ const INITIAL_TASKS: Task[] = [
 export function KanbanBoard() {
   const [tasks, setTasks] = useState<Task[]>(INITIAL_TASKS);
   const [activeTask, setActiveTask] = useState<Task | null>(null);
+  const [isClient, setIsClient] = useState(false);
 
-  // Use Sensors - Standard Trello-like feel
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  // Sensor configuration to prevent scroll capture
+  const pointerSensor = useSensor(PointerSensor, {
+    activationConstraint: { distance: 8 },
+  });
+  
+  const touchSensor = useSensor(TouchSensor, {
+    activationConstraint: { delay: 250, tolerance: 10 },
+  });
+  
+  const keyboardSensor = useSensor(KeyboardSensor, {
+    coordinateGetter: sortableKeyboardCoordinates,
+  });
+
+  // Only use TouchSensor if on a touch device to avoid scroll interference
   const sensors = useSensors(
-    useSensor(PointerSensor, {
-      activationConstraint: { distance: 8 },
-    }),
-    useSensor(TouchSensor, {
-      activationConstraint: { delay: 250, tolerance: 5 },
-    }),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
-    })
+    ...(isClient && ('ontouchstart' in window || navigator.maxTouchPoints > 0)
+      ? [touchSensor, keyboardSensor]
+      : [pointerSensor, keyboardSensor])
   );
 
   function onDragStart(event: DragStartEvent) {
@@ -120,7 +132,7 @@ export function KanbanBoard() {
   }
 
   return (
-    <div className="flex gap-6 p-6 overflow-x-auto w-full max-w-7xl mx-auto touch-pan-y">
+    <div className="flex gap-6 p-6 w-full max-w-7xl mx-auto">
       <DndContext
         sensors={sensors}
         collisionDetection={closestCorners}
