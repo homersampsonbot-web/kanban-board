@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   DndContext,
   DragOverlay,
@@ -52,32 +52,22 @@ export function KanbanBoard() {
   const [tasks, setTasks] = useState<Task[]>(INITIAL_TASKS);
   const [activeTask, setActiveTask] = useState<Task | null>(null);
 
+  // Trello-style: Only block scroll when handle is held
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: { distance: 8 },
     }),
     useSensor(TouchSensor, {
-      activationConstraint: { delay: 180, tolerance: 10 },
+      activationConstraint: { delay: 250, tolerance: 5 },
     }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     })
   );
 
-  const lockScroll = () => {
-    document.body.style.overflow = "hidden";
-    document.body.style.touchAction = "none";
-  };
-
-  const unlockScroll = () => {
-    document.body.style.overflow = "";
-    document.body.style.touchAction = "";
-  };
-
   function onDragStart(event: DragStartEvent) {
     if (event.active.data.current?.type === "Task") {
       setActiveTask(event.active.data.current.task);
-      lockScroll();
     }
   }
 
@@ -124,16 +114,14 @@ export function KanbanBoard() {
 
   function onDragEnd(event: DragEndEvent) {
     setActiveTask(null);
-    unlockScroll();
   }
 
   function onDragCancel() {
     setActiveTask(null);
-    unlockScroll();
   }
 
   return (
-    <div className="flex gap-6 p-6 h-full overflow-x-auto items-start touch-pan-y w-full max-w-7xl mx-auto">
+    <div className="flex gap-6 p-6 min-h-[100dvh] overflow-x-auto overflow-y-auto items-start touch-pan-y w-full max-w-7xl mx-auto bg-gray-50">
       <DndContext
         sensors={sensors}
         collisionDetection={closestCorners}

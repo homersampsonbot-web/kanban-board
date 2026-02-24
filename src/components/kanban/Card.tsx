@@ -32,17 +32,17 @@ export function Card({ task, isOverlay }: Props) {
     transform: CSS.Translate.toString(transform),
   };
 
-  const cardClasses = `bg-white rounded-lg shadow-sm border border-gray-200 min-h-[64px] flex items-center group touch-none ${
+  const cardClasses = `bg-white rounded-lg shadow-sm border border-gray-200 min-h-[64px] flex items-center group ${
     isOverlay ? "shadow-2xl ring-2 ring-blue-500 scale-105 z-50" : ""
   } ${isDragging ? "opacity-30 border-blue-200 bg-blue-50" : "hover:border-gray-300"}`;
 
   return (
     <div ref={setNodeRef} style={style} className={cardClasses}>
-      {/* Drag Handle */}
+      {/* Drag Handle - ONLY place where drag can be initiated */}
       <div
         {...attributes}
         {...listeners}
-        className="p-4 cursor-grab active:cursor-grabbing text-gray-400 hover:text-gray-600 transition-colors flex-shrink-0"
+        className="p-4 cursor-grab active:cursor-grabbing text-gray-400 hover:text-gray-600 transition-colors flex-shrink-0 touch-none"
         aria-label="Drag handle"
       >
         <GripVertical size={20} />
