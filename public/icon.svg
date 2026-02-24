@@ -1,0 +1,16 @@
+<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" fill="#3b82f6"/>
+  <rect x="64" y="64" width="96" height="384" fill="white" rx="8"/>
+  <rect x="192" y="64" width="96" height="384" fill="white" rx="8"/>
+  <rect x="320" y="64" width="96" height="384" fill="white" rx="8"/>
+  
+  <!-- Cards -->
+  <rect x="72" y="80" width="80" height="32" fill="#3b82f6" rx="4"/>
+  <rect x="72" y="120" width="80" height="32" fill="#ef4444" rx="4"/>
+  
+  <rect x="200" y="80" width="80" height="32" fill="#10b981" rx="4"/>
+  
+  <rect x="328" y="80" width="80" height="32" fill="#f59e0b" rx="4"/>
+  <rect x="328" y="120" width="80" height="32" fill="#8b5cf6" rx="4"/>
+  <rect x="328" y="160" width="80" height="32" fill="#06b6d4" rx="4"/>
+</svg>
