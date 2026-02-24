@@ -14,7 +14,6 @@ import {
   DragOverEvent,
   DragEndEvent,
   MeasuringStrategy,
-  DragCancelEvent,
 } from "@dnd-kit/core";
 import {
   arrayMove,
@@ -52,7 +51,7 @@ export function KanbanBoard() {
   const [tasks, setTasks] = useState<Task[]>(INITIAL_TASKS);
   const [activeTask, setActiveTask] = useState<Task | null>(null);
 
-  // Trello-style: Only block scroll when handle is held
+  // Use Sensors - Standard Trello-like feel
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: { distance: 8 },
@@ -112,7 +111,7 @@ export function KanbanBoard() {
     }
   }
 
-  function onDragEnd(event: DragEndEvent) {
+  function onDragEnd() {
     setActiveTask(null);
   }
 
@@ -121,7 +120,7 @@ export function KanbanBoard() {
   }
 
   return (
-    <div className="flex gap-6 p-6 min-h-[100dvh] overflow-x-auto overflow-y-auto items-start touch-pan-y w-full max-w-7xl mx-auto bg-gray-50">
+    <div className="flex gap-6 p-6 overflow-x-auto w-full max-w-7xl mx-auto touch-pan-y">
       <DndContext
         sensors={sensors}
         collisionDetection={closestCorners}
